@@ -8,8 +8,6 @@ from spacy.lang.en.stop_words import STOP_WORDS
 import math
 import logging
 
-MAX_KEYWORDS = 20
-
 languages = dict(
     en='en_core_web_sm',
     fr='fr_core_news_sm',
@@ -104,12 +102,11 @@ class KeywordsExtractor(object):
 
         return g_norm
 
-    def get_keywords(self, percent=None):
+    def get_keywords(self, percent, max_keywords):
         """Print top number keywords"""
         total_words_count = len(self.node_weight)
-        max_words = math.floor(total_words_count *
-                               (percent/100)) if percent else total_words_count
-        max_words = min(max_words, MAX_KEYWORDS)
+        max_words = math.floor(total_words_count * (percent/100))
+        max_words = min(max_words, max_keywords)
         node_weight = OrderedDict(
             sorted(self.node_weight.items(), key=lambda t: t[1], reverse=True))
 
