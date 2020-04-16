@@ -7,6 +7,8 @@ import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 import math
 import logging
+import re
+from functools import reduce
 
 languages = dict(
     en='en_core_web_sm',
@@ -22,6 +24,23 @@ languages = dict(
 )
 
 logger = logging.getLogger(__name__)
+
+special_chars_pattern = re.compile(r'\W+')
+leading_n_traling_underscore = re.compile(r'^_+|_+$')
+
+
+def clean_and_filter_word(reduced, item):
+    word, rank = item
+
+    clean_word = special_chars_pattern.sub('_', word)
+    clean_word = leading_n_traling_underscore.sub('', clean_word)
+
+    if len(clean_word) > 1:
+        reduced_copy = {**reduced}
+        reduced_copy[clean_word] = rank
+        return reduced_copy
+    else:
+        return reduced
 
 
 class KeywordsExtractor(object):
@@ -104,18 +123,21 @@ class KeywordsExtractor(object):
 
     def get_keywords(self, percent, max_keywords):
         """Print top number keywords"""
-        total_words_count = len(self.node_weight)
-        max_words = math.floor(total_words_count * (percent/100))
-        max_words = min(max_words, max_keywords)
         node_weight = OrderedDict(
             sorted(self.node_weight.items(), key=lambda t: t[1], reverse=True))
 
+        filtered_words = reduce(clean_and_filter_word, node_weight.items(), {})
+
         logger.debug(
-            'all keywords:\n %s',
-            '\n'.join(map(lambda key: str(key), list(node_weight.items())))
+            'all filtered keywords:\n %s',
+            '\n'.join(map(lambda key: str(key), list(filtered_words.items())))
         )
 
-        return list(node_weight)[0:max_words]
+        total_words_count = len(filtered_words)
+        max_words = math.floor(total_words_count * (percent/100))
+        max_words = min(max_words, max_keywords)
+
+        return list(filtered_words)[0:max_words]
 
     def analyze(self, text,
                 candidate_pos=['NOUN', 'PROPN'],
@@ -146,7 +168,7 @@ class KeywordsExtractor(object):
 
         # Iteration
         previous_pr = 0
-        for epoch in range(self.steps):
+        for _ in range(self.steps):
             pr = (1-self.d) + self.d * np.dot(g, pr)
             if abs(previous_pr - sum(pr)) < self.min_diff:
                 break
