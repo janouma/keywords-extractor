@@ -43,7 +43,7 @@ def clean_and_filter_word(reduced, item):
         return reduced
 
 
-class KeywordsExtractor(object):
+class KeywordsExtractor():
     """Extract keywords from text"""
 
     def __init__(self, language_code):
