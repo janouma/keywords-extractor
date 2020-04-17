@@ -10,10 +10,7 @@ import logging
 import re
 from functools import reduce
 
-languages = dict(
-    en='en_core_web_sm',
-    fr='fr_core_news_sm'
-)
+languages = dict(en='en_core_web_sm')
 
 logger = logging.getLogger(__name__)
 

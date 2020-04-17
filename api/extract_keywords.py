@@ -9,7 +9,7 @@ body_schema = {
     'properties': {
         'lang': {
             'type': 'string',
-            'enum': ['en', 'fr']
+            'enum': ['en']
         },
         'text': {'type': 'string'},
         'limitRatio': {'type': 'integer'},
