@@ -7,7 +7,7 @@ from lib.words_counter import count_words
 body_schema = {
     'lang': {
         'type': 'string',
-        'allowed': ['en'],
+        'allowed': ['en', 'fr', 'de', 'es', 'pt', 'it', 'nl', 'el', 'nb', 'lt'],
         'required': True
     },
 
