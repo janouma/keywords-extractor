@@ -1,2 +1,5 @@
 __pycache__
 _test_*
+.jwt_secret
+.password
+.api_key
