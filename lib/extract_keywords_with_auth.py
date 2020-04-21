@@ -13,6 +13,12 @@ AUTH_FAILED_MSG = 'authentication failed'
 root_dir = get_path(__file__).parent / '..'
 spaces_pattern = re.compile(r'\s+')
 
+with open(root_dir / JWT_SECRET_FILE, 'r') as jwt_secret_file:
+    jwt_secret = jwt_secret_file.read()
+
+with open(root_dir / PASSWORD_FILE, 'r') as password_file:
+    password = password_file.read()
+
 
 def reject(handler_instance, message, code=401):
     handler_instance.send_response(code)
@@ -25,12 +31,6 @@ def reject(handler_instance, message, code=401):
 
 class authenticatedHandler(BaseHTTPRequestHandler):
     def do_POST(self):
-        with open(root_dir / JWT_SECRET_FILE, 'r') as jwt_secret_file:
-            jwt_secret = jwt_secret_file.read()
-
-        with open(root_dir / PASSWORD_FILE, 'r') as password_file:
-            password = password_file.read()
-
         authorization = self.headers.get('Authorization')
 
         if authorization is None:
