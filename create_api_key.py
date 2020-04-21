@@ -13,8 +13,9 @@ with open(JWT_SECRET_FILE, 'w') as jwt_secret_file:
 with open(PASSWORD_FILE, 'w') as password_file:
     password_file.write(password)
 
-api_key = jwt.encode({
-    'password': password}, secret,
+api_key = jwt.encode(
+    {'password': password},
+    secret,
     algorithm=ALGORITHM
 ).decode()
 
