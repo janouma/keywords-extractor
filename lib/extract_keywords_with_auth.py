@@ -20,28 +20,26 @@ with open(root_dir / PASSWORD_FILE, 'r') as password_file:
     password = password_file.read()
 
 
-def reject(handler_instance, message, code=401):
-    handler_instance.send_response(code)
-    handler_instance.send_header('Content-type', 'application/json')
-    handler_instance.end_headers()
-
-    response_body = json.dumps({'message': message})
-    handler_instance.wfile.write(response_body.encode())
-
-
 class authenticatedHandler(BaseHTTPRequestHandler):
+    def reject(self, message, code=401):
+        self.send_response(code)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+
+        response_body = json.dumps({'message': message})
+        self.wfile.write(response_body.encode())
+
     def do_POST(self):
         authorization = self.headers.get('Authorization')
 
         if authorization is None:
-            reject(handler_instance=self, message='authorization required')
+            self.reject(message='authorization required')
             return
 
         auth_type, api_key = spaces_pattern.split(authorization)
 
         if auth_type != AUTH_TYPE:
-            reject(
-                handler_instance=self,
+            self.reject(
                 message='wrong authorization type "' + auth_type +
                 '", "' + AUTH_TYPE + '" was expected'
             )
@@ -50,13 +48,12 @@ class authenticatedHandler(BaseHTTPRequestHandler):
         try:
             payload = jwt.decode(api_key, jwt_secret, algorithms=[ALGORITHM])
         except InvalidSignatureError:
-            reject(handler_instance=self, message=AUTH_FAILED_MSG)
+            self.reject(message=AUTH_FAILED_MSG)
             return
         except Exception as error:
             print('Unexpected error:\n{0}'.format(error))
 
-            reject(
-                handler_instance=self,
+            self.reject(
                 message=AUTH_FAILED_MSG,
                 code=500
             )
@@ -64,7 +61,7 @@ class authenticatedHandler(BaseHTTPRequestHandler):
             return
 
         if payload.get('password') != password:
-            reject(handler_instance=self, message=AUTH_FAILED_MSG)
+            self.reject(message=AUTH_FAILED_MSG)
             return
 
         return extract_keywords.handler.do_POST(self)
