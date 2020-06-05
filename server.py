@@ -5,8 +5,8 @@ from logging import INFO
 from os import environ as env
 
 DEFAULT_PORT = 8900
-port_env = env.get('KEYWORD_EXTRACTOR_PORT')
-port = int(port_env) if port_env else DEFAULT_PORT
+port_env = env.get('KEYWORD_EXTRACTOR_PORT', env.get('PORT', DEFAULT_PORT))
+port = int(port_env)
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

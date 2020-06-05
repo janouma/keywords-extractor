@@ -12,7 +12,7 @@ Python service to automatically extract keywords from a text.
 ## Install
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Start up
@@ -20,7 +20,13 @@ pip install -r requirements.txt
 ```bash
 KEYWORD_EXTRACTOR_PORT=3005 python3 server.py
 ```
-> port is set to 8900 when `KEYWORD_EXTRACTOR_PORT` enviroment variable is missing
+or
+
+```bash
+PORT=3005 python3 server.py
+```
+
+> port is set to 8900 when `KEYWORD_EXTRACTOR_PORT` and `PORT` enviroment variables are missing
 
 
 ## Generate API key
