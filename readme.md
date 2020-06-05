@@ -18,12 +18,12 @@ pip3 install -r requirements.txt
 ## Start up
 
 ```bash
-KEYWORD_EXTRACTOR_PORT=3005 python3 server.py
+JWT_SECRET=`cat .jwt_secret` PASSWORD=`cat .password` KEYWORD_EXTRACTOR_PORT=3005 python3 server.py
 ```
 or
 
 ```bash
-PORT=3005 python3 server.py
+JWT_SECRET=`cat .jwt_secret` PASSWORD=`cat .password` PORT=3005 python3 server.py
 ```
 
 > port is set to 8900 when `KEYWORD_EXTRACTOR_PORT` and `PORT` enviroment variables are missing

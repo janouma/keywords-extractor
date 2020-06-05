@@ -5,19 +5,25 @@ import jwt
 from jwt.exceptions import InvalidSignatureError
 import re
 import json
-from lib.constants import JWT_SECRET_FILE, PASSWORD_FILE, ALGORITHM
+from lib.constants import ALGORITHM
+from os import environ as env
+import logging
+from logging import INFO
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(INFO)
 
 AUTH_TYPE = 'Bearer'
 AUTH_FAILED_MSG = 'authentication failed'
 
 root_dir = get_path(__file__).parent / '..'
 spaces_pattern = re.compile(r'\s+')
+jwt_secret = env.get('JWT_SECRET')
+password = env.get('PASSWORD')
 
-with open(root_dir / JWT_SECRET_FILE, 'r') as jwt_secret_file:
-    jwt_secret = jwt_secret_file.read()
-
-with open(root_dir / PASSWORD_FILE, 'r') as password_file:
-    password = password_file.read()
+logger.info('JWT_SECRET: ' + str(jwt_secret))
+logger.info('PASSWORD: ' + str(password))
 
 
 class authenticatedHandler(BaseHTTPRequestHandler):
