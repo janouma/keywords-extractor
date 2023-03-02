@@ -26,7 +26,8 @@ or
 JWT_SECRET=`cat .jwt_secret` PASSWORD=`cat .password` PORT=3005 python3 server.py
 ```
 
-> port is set to 8900 when `KEYWORD_EXTRACTOR_PORT` and `PORT` enviroment variables are missing
+> Port is set to 8900 when `KEYWORD_EXTRACTOR_PORT` and `PORT` enviroment variables are missing.<br/>
+> To use IPV6 set the `IPV6=yes` enviroment variable.
 
 
 ## Generate API key
