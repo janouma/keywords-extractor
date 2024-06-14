@@ -1,0 +1,16 @@
+dockerfile
+.dockerignore
+.jwt_secret
+.api_key
+.password
+_test_*
+test
+nohup.out
+__pycache__
+.DS_Store
+.git
+.gitignore
+.vscode
+Procfile
+readme.md
+build_docker.sh
