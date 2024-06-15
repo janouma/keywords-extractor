@@ -2,7 +2,10 @@
 FROM python:3.9.6-slim
 
 # define environment variables
-ENV APP_HOME=/home/keywords-extractor/app
+ARG AUTHOR
+ARG NAME
+ARG VERSION
+ENV APP_HOME="/home/$NAME/app"
 ENV PYTHON_PORT=3005
 
 # install build dependencies
@@ -35,3 +38,8 @@ EXPOSE $PYTHON_PORT
 
 # application launch command
 CMD export JWT_SECRET=`cat .jwt_secret`; export PASSWORD=`cat .password`; PORT=$PYTHON_PORT python server.py
+
+LABEL com.heimdallinsight-author=$AUTHOR
+LABEL com.heimdallinsight-name=$NAME
+LABEL com.heimdallinsight-tag=$VERSION
+LABEL com.heimdallinsight-fully-qualified-name="$AUTHOR/$NAME:$VERSION"
